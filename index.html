@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tree Planting Initiative</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#4CAF50',secondary:'#2E7D32'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Poppins', sans-serif;
+background: linear-gradient(to bottom, #0f2c4d, #1e3a5f);
+min-height: 100vh;
+color: #fff;
+}
+.snow {
+position: absolute;
+width: 10px;
+height: 10px;
+background: white;
+border-radius: 50%;
+opacity: 0.8;
+animation: fall linear infinite;
+}
+@keyframes fall {
+to {
+transform: translateY(100vh);
+}
+}
+.tree-counter {
+text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+.progress-bar {
+height: 12px;
+border-radius: 6px;
+overflow: hidden;
+background: rgba(255, 255, 255, 0.2);
+}
+.progress-fill {
+height: 100%;
+background: linear-gradient(90deg, #4CAF50, #8BC34A);
+border-radius: 6px;
+transition: width 0.5s ease;
+}
+.card {
+background: white;
+border-radius: 12px;
+overflow: hidden;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+.leaderboard-item {
+border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.leaderboard-item:last-child {
+border-bottom: none;
+}
+.story-card {
+height: 100%;
+display: flex;
+flex-direction: column;
+}
+.story-image {
+height: 160px;
+background-size: cover;
+background-position: center;
+}
+input:focus, select:focus, textarea:focus {
+outline: none;
+border-color: #4CAF50;
+box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+.tree-bg {
+background-image: url('https://readdy.ai/api/search-image?query=A%20serene%20winter%20forest%20scene%20with%20tall%20pine%20trees%20covered%20in%20snow%2C%20under%20a%20dark%20blue%20night%20sky%20with%20stars.%20The%20trees%20create%20silhouettes%20against%20the%20night%20sky%2C%20with%20gentle%20snowfall.%20The%20scene%20has%20a%20peaceful%2C%20magical%20winter%20atmosphere%20with%20deep%20blue%20gradient%20background.&width=1600&height=800&seq=12345&orientation=landscape');
+background-size: cover;
+background-position: bottom;
+}
+</style>
+</head>
+<body>
+<div class="relative min-h-screen overflow-hidden">
+<!-- Snow Animation Container -->
+<div id="snow-container" class="absolute inset-0 pointer-events-none"></div>
+<!-- Hero Section -->
+<header class="relative tree-bg pt-6 pb-20">
+<div class="container mx-auto px-4">
+<nav class="flex justify-between items-center mb-12">
+<div class="text-white text-2xl font-['Pacifico']">GreenEarth</div>
+<div class="flex gap-4">
+<a href="#" class="text-white hover:text-primary transition">About</a>
+<a href="#" class="text-white hover:text-primary transition">Impact</a>
+<a href="#" class="text-white hover:text-primary transition">Stories</a>
+<a href="#" class="text-white hover:text-primary transition">Contact</a>
+</div>
+</nav>
+<div class="text-center max-w-4xl mx-auto pt-10 pb-16">
+<h1 class="text-6xl md:text-7xl font-bold mb-4 tree-counter">24,899,512</h1>
+<p class="text-xl md:text-2xl mb-8">Trees planted worldwide. Join our mission.</p>
+<div class="flex flex-col md:flex-row justify-center gap-4 mb-10">
+<button class="bg-primary text-white py-3 px-8 text-lg font-semibold !rounded-button whitespace-nowrap hover:bg-opacity-90 transition">Donate Now</button>
+<button class="bg-white text-primary py-3 px-8 text-lg font-semibold !rounded-button whitespace-nowrap hover:bg-opacity-90 transition">Request Seedling</button>
+</div>
+<div class="max-w-xl mx-auto">
+<div class="flex justify-between text-sm mb-2">
+<span>Our 2026 Goal: 1,000 Trees</span>
+<span>24.9% Complete</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width: 24.9%"></div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="relative z-10 -mt-10">
+<div class="container mx-auto px-4">
+<!-- Our Story Section -->
+<section class="mb-16">
+<div class="card p-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+<div class="order-2 lg:order-1">
+<h2 class="text-gray-800 text-3xl font-bold mb-4">Our Story</h2>
+<div class="space-y-4 text-gray-600">
+<p>Founded in early 2025, GreenEarth emerged from a simple yet powerful vision: to combat climate change one tree at a time. What began as a small community initiative has blossomed into a nationwide movement, bringing together individuals, families, schools, and corporations in a shared mission to restore our planet's green cover.</p>
+<p>Our foundation believes in the power of small actions creating big impacts. Each tree planted not only helps absorb CO₂ but also provides habitat for wildlife, prevents soil erosion, and creates lasting environmental benefits for generations to come.</p>
+<p>With a dedicated team of environmental experts, community organizers, and passionate volunteers, we're working tirelessly to reach our goal of planting 1,000 trees by 2026. But we're not just planting trees – we're growing a community of environmental stewards committed to protecting our planet's future.</p>
+</div>
+<div class="mt-8 flex flex-wrap gap-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 flex items-center justify-center bg-green-100 rounded-full">
+<i class="ri-team-line text-primary ri-xl"></i>
+</div>
+<div>
+<h4 class="text-gray-800 font-semibold">5,000+</h4>
+<p class="text-gray-500 text-sm">Active Volunteers</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 flex items-center justify-center bg-green-100 rounded-full">
+<i class="ri-map-pin-line text-primary ri-xl"></i>
+</div>
+<div>
+<h4 class="text-gray-800 font-semibold">50+</h4>
+<p class="text-gray-500 text-sm">Cities Covered</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 flex items-center justify-center bg-green-100 rounded-full">
+<i class="ri-group-line text-primary ri-xl"></i>
+</div>
+<div>
+<h4 class="text-gray-800 font-semibold">100+</h4>
+<p class="text-gray-500 text-sm">Partner Organizations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2">
+<div class="relative h-[400px] rounded-lg overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20serene%20and%20inspiring%20scene%20of%20environmental%20conservation%20volunteers%20working%20together%20in%20a%20lush%20forest%20setting.%20The%20image%20shows%20diverse%20group%20of%20people%20planting%20trees%2C%20with%20sunlight%20filtering%20through%20the%20canopy.%20The%20scene%20captures%20both%20the%20beauty%20of%20nature%20and%20human%20dedication%20to%20environmental%20protection%2C%20with%20modern%20equipment%20and%20organized%20planting%20activities%20visible.%20The%20lighting%20is%20warm%20and%20natural%2C%20creating%20an%20uplifting%20and%20hopeful%20atmosphere.&width=600&height=400&seq=1007&orientation=landscape" alt="Our Story" class="w-full h-full object-cover">
+<div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Why Trees Section -->
+<section class="mb-16">
+<div class="card p-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+<div>
+<h2 class="text-gray-800 text-3xl font-bold mb-6">Why Trees? Why Now?</h2>
+<div class="space-y-6">
+<div class="flex gap-4 items-start">
+<div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-blue-100 rounded-full">
+<i class="ri-temp-cold-line text-blue-600 ri-xl"></i>
+</div>
+<div>
+<h3 class="text-gray-800 font-semibold mb-2">Climate Change Mitigation</h3>
+<p class="text-gray-600">Trees are natural carbon capture machines, absorbing CO₂ and releasing oxygen. A single mature tree can absorb up to 48 pounds of carbon dioxide per year.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-green-100 rounded-full">
+<i class="ri-home-heart-line text-green-600 ri-xl"></i>
+</div>
+<div>
+<h3 class="text-gray-800 font-semibold mb-2">Biodiversity Protection</h3>
+<p class="text-gray-600">Trees provide essential habitats for countless species. A single oak tree can support over 500 different species of wildlife and insects.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-yellow-100 rounded-full">
+<i class="ri-water-flash-line text-yellow-600 ri-xl"></i>
+</div>
+<div>
+<h3 class="text-gray-800 font-semibold mb-2">Water Conservation</h3>
+<p class="text-gray-600">Trees help prevent soil erosion, reduce water pollution, and regulate the water cycle. Their root systems act as natural water filters.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-purple-100 rounded-full">
+<i class="ri-mental-health-line text-purple-600 ri-xl"></i>
+</div>
+<div>
+<h3 class="text-gray-800 font-semibold mb-2">Community Well-being</h3>
+<p class="text-gray-600">Urban trees reduce stress, improve air quality, and create spaces for community connection. They can increase property values by up to 15%.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="aspect-square rounded-lg overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20majestic%20ancient%20tree%20in%20a%20sunlit%20forest%2C%20with%20rays%20of%20sunlight%20filtering%20through%20its%20dense%20canopy.%20The%20tree%20has%20a%20massive%20trunk%20and%20sprawling%20roots%2C%20symbolizing%20strength%20and%20longevity.%20The%20scene%20shows%20the%20interconnectedness%20of%20nature%2C%20with%20various%20plants%20and%20wildlife%20visible%20around%20the%20tree%20base.%20The%20lighting%20creates%20a%20magical%2C%20ethereal%20atmosphere%20highlighting%20the%20importance%20of%20forest%20conservation.&width=600&height=600&seq=1008&orientation=squarish" alt="Importance of Trees" class="w-full h-full object-cover">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Leaderboard Section -->
+<section class="mb-16">
+<div class="card p-6">
+<h2 class="text-gray-800 text-2xl font-bold mb-6">Leaderboard</h2>
+<div class="overflow-hidden">
+<div class="leaderboard-item flex items-center py-3 px-4">
+<div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">1</div>
+<div class="ml-4 flex-1">
+<h3 class="text-gray-800 font-medium">EcoWarrior</h3>
+<p class="text-gray-500 text-sm">Joined Jan 2025</p>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold">1,245</span>
+<p class="text-gray-500 text-sm">trees</p>
+</div>
+</div>
+<div class="leaderboard-item flex items-center py-3 px-4">
+<div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">2</div>
+<div class="ml-4 flex-1">
+<h3 class="text-gray-800 font-medium">GreenThumb</h3>
+<p class="text-gray-500 text-sm">Joined Mar 2025</p>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold">987</span>
+<p class="text-gray-500 text-sm">trees</p>
+</div>
+</div>
+<div class="leaderboard-item flex items-center py-3 px-4">
+<div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">3</div>
+<div class="ml-4 flex-1">
+<h3 class="text-gray-800 font-medium">ForestFriend</h3>
+<p class="text-gray-500 text-sm">Joined Feb 2025</p>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold">754</span>
+<p class="text-gray-500 text-sm">trees</p>
+</div>
+</div>
+<div class="leaderboard-item flex items-center py-3 px-4">
+<div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">4</div>
+<div class="ml-4 flex-1">
+<h3 class="text-gray-800 font-medium">NatureLover</h3>
+<p class="text-gray-500 text-sm">Joined Apr 2025</p>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold">621</span>
+<p class="text-gray-500 text-sm">trees</p>
+</div>
+</div>
+<div class="leaderboard-item flex items-center py-3 px-4">
+<div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">5</div>
+<div class="ml-4 flex-1">
+<h3 class="text-gray-800 font-medium">EarthGuardian</h3>
+<p class="text-gray-500 text-sm">Joined May 2025</p>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold">498</span>
+<p class="text-gray-500 text-sm">trees</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contribution Options -->
+<section class="mb-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="card">
+<div class="p-6">
+<h2 class="text-gray-800 text-2xl font-bold mb-4">Make a Donation</h2>
+<p class="text-gray-600 mb-6">Every dollar plants a tree. Make a difference today with just $1.</p>
+<div class="mb-6">
+<label class="block text-gray-700 mb-2">Select Your Impact</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+<button class="donation-card relative p-4 border border-gray-200 !rounded-button bg-white hover:border-primary transition-all duration-200 group">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xl font-semibold text-primary">$1</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-seedling-line text-green-600"></i>
+</div>
+</div>
+<p class="text-sm text-gray-600">Plant 1 Tree</p>
+<div class="absolute top-2 right-2 w-4 h-4 border-2 border-gray-300 rounded-full group-[.selected]:bg-primary group-[.selected]:border-primary"></div>
+</button>
+<button class="donation-card relative p-4 border border-gray-200 !rounded-button bg-white hover:border-primary transition-all duration-200 group">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xl font-semibold text-primary">$10</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-plant-line text-green-600"></i>
+</div>
+</div>
+<p class="text-sm text-gray-600">Plant 10 Trees</p>
+<div class="absolute top-2 right-2 w-4 h-4 border-2 border-gray-300 rounded-full group-[.selected]:bg-primary group-[.selected]:border-primary"></div>
+</button>
+<button class="donation-card relative p-4 border border-gray-200 !rounded-button bg-white hover:border-primary transition-all duration-200 group">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xl font-semibold text-primary">$25</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-sprout-line text-green-600"></i>
+</div>
+</div>
+<p class="text-sm text-gray-600">Plant 25 Trees</p>
+<div class="absolute top-2 right-2 w-4 h-4 border-2 border-gray-300 rounded-full group-[.selected]:bg-primary group-[.selected]:border-primary"></div>
+</button>
+<button class="donation-card relative p-4 border border-gray-200 !rounded-button bg-white hover:border-primary transition-all duration-200 group">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xl font-semibold text-primary">$50</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-leaf-line text-green-600"></i>
+</div>
+</div>
+<p class="text-sm text-gray-600">Plant 50 Trees</p>
+<div class="absolute top-2 right-2 w-4 h-4 border-2 border-gray-300 rounded-full group-[.selected]:bg-primary group-[.selected]:border-primary"></div>
+</button>
+<button class="donation-card relative p-4 border border-gray-200 !rounded-button bg-white hover:border-primary transition-all duration-200 group">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xl font-semibold text-primary">$100</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-tree-line text-green-600"></i>
+</div>
+</div>
+<p class="text-sm text-gray-600">Plant 100 Trees</p>
+<div class="absolute top-2 right-2 w-4 h-4 border-2 border-gray-300 rounded-full group-[.selected]:bg-primary group-[.selected]:border-primary"></div>
+</button>
+</div>
+<div class="relative">
+<input type="text" placeholder="Or enter custom amount" class="w-full px-4 py-2 border border-gray-300 !rounded-button pl-8">
+<div class="absolute left-3 top-1/2 -translate-y-1/2">
+<span class="text-gray-500">$</span>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<label class="block text-gray-700 mb-2">Payment Method</label>
+<div class="flex gap-3 mb-4">
+<button class="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 !rounded-button whitespace-nowrap hover:bg-gray-50">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-visa-fill text-blue-600 ri-lg"></i>
+</div>
+<span>Credit Card</span>
+</button>
+<button class="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 !rounded-button whitespace-nowrap hover:bg-gray-50">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-paypal-fill text-blue-800 ri-lg"></i>
+</div>
+<span>PayPal</span>
+</button>
+</div>
+</div>
+<button class="w-full bg-primary text-white py-3 font-semibold !rounded-button whitespace-nowrap hover:bg-opacity-90 transition">Donate Now</button>
+</div>
+</div>
+<div class="card">
+<div class="p-6">
+<h2 class="text-gray-800 text-2xl font-bold mb-4">Request a Seedling</h2>
+<p class="text-gray-600 mb-6">Want to plant a tree yourself? Request a free seedling and join our mission.</p>
+<div class="mb-4">
+<label class="block text-gray-700 mb-2">Full Name</label>
+<input type="text" class="w-full px-4 py-2 border border-gray-300 !rounded-button" placeholder="Your name">
+</div>
+<div class="mb-4">
+<label class="block text-gray-700 mb-2">Email Address</label>
+<input type="email" class="w-full px-4 py-2 border border-gray-300 !rounded-button" placeholder="Your email">
+</div>
+<div class="mb-4">
+<label class="block text-gray-700 mb-2">Shipping Address</label>
+<textarea class="w-full px-4 py-2 border border-gray-300 !rounded-button" rows="3" placeholder="Your address"></textarea>
+</div>
+<div class="mb-6">
+<label class="block text-gray-700 mb-2">Tree Type Preference</label>
+<div class="relative">
+<select class="w-full px-4 py-2 border border-gray-300 !rounded-button appearance-none pr-8">
+<option>Oak</option>
+<option>Pine</option>
+<option>Maple</option>
+<option>Birch</option>
+<option>Cherry</option>
+</select>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-arrow-down-s-line text-gray-500"></i>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-white py-3 font-semibold !rounded-button whitespace-nowrap hover:bg-opacity-90 transition">Request Seedling</button>
+</div>
+</div>
+</section>
+<!-- Impact Calculator -->
+<section class="mb-16">
+<div class="card p-6">
+<h2 class="text-gray-800 text-2xl font-bold mb-6">Environmental Impact Calculator</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="text-center p-4 border border-gray-100 rounded-lg bg-gray-50">
+<div class="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-green-100 rounded-full">
+<i class="ri-leaf-line text-primary ri-2x"></i>
+</div>
+<h3 class="text-gray-800 text-xl font-semibold mb-1">21,500 tons</h3>
+<p class="text-gray-600">CO₂ Absorbed</p>
+</div>
+<div class="text-center p-4 border border-gray-100 rounded-lg bg-gray-50">
+<div class="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-blue-100 rounded-full">
+<i class="ri-water-flash-line text-blue-500 ri-2x"></i>
+</div>
+<h3 class="text-gray-800 text-xl font-semibold mb-1">498,000 gallons</h3>
+<p class="text-gray-600">Water Filtered</p>
+</div>
+<div class="text-center p-4 border border-gray-100 rounded-lg bg-gray-50">
+<div class="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-yellow-100 rounded-full">
+<i class="ri-home-heart-line text-yellow-600 ri-2x"></i>
+</div>
+<h3 class="text-gray-800 text-xl font-semibold mb-1">74,698</h3>
+<p class="text-gray-600">Wildlife Habitats Created</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Stories Section -->
+<section class="mb-16">
+<h2 class="text-white text-3xl font-bold mb-8 text-center">Planting Stories</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="card story-card">
+<div class="story-image" style="background-image: url('https://readdy.ai/api/search-image?query=A%20person%20planting%20a%20young%20oak%20tree%20sapling%20in%20rich%20soil%2C%20with%20mountains%20in%20the%20background.%20The%20scene%20shows%20hands%20gently%20placing%20the%20small%20tree%20in%20a%20freshly%20dug%20hole%2C%20with%20gardening%20tools%20nearby.%20The%20image%20has%20warm%2C%20natural%20lighting%20and%20shows%20the%20beginning%20of%20a%20new%20life.&width=400&height=300&seq=1001&orientation=landscape')"></div>
+<div class="p-4 flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-gray-800 font-semibold">Mountain Restoration</h3>
+<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Oak</span>
+</div>
+<p class="text-gray-600 text-sm mb-3">Planted 5 oak trees in the Rocky Mountain region to help restore areas affected by wildfires.</p>
+<div class="flex justify-between items-center mt-auto pt-2 text-xs text-gray-500">
+<span>By Rebecca Mitchell</span>
+<span>June 12, 2025</span>
+</div>
+</div>
+</div>
+<div class="card story-card">
+<div class="story-image" style="background-image: url('https://readdy.ai/api/search-image?query=A%20community%20tree%20planting%20event%20in%20a%20local%20park%2C%20with%20diverse%20group%20of%20people%20of%20various%20ages%20working%20together.%20Several%20young%20maple%20saplings%20are%20being%20planted%20in%20a%20row.%20People%20are%20smiling%20and%20collaborating%2C%20with%20shovels%20and%20watering%20cans%20visible.%20The%20scene%20has%20a%20bright%2C%20positive%20atmosphere%20showing%20community%20spirit.&width=400&height=300&seq=1002&orientation=landscape')"></div>
+<div class="p-4 flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-gray-800 font-semibold">Community Park Project</h3>
+<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Maple</span>
+</div>
+<p class="text-gray-600 text-sm mb-3">Our neighborhood came together to plant 12 maple trees in the local park, creating shade for future generations.</p>
+<div class="flex justify-between items-center mt-auto pt-2 text-xs text-gray-500">
+<span>By Community Group</span>
+<span>May 28, 2025</span>
+</div>
+</div>
+</div>
+<div class="card story-card">
+<div class="story-image" style="background-image: url('https://readdy.ai/api/search-image?query=A%20school%20classroom%20outdoor%20activity%20with%20elementary%20school%20children%20planting%20small%20pine%20tree%20saplings.%20Children%20wearing%20gardening%20gloves%2C%20with%20a%20teacher%20guiding%20them.%20The%20scene%20shows%20educational%20engagement%20with%20nature%2C%20with%20planting%20supplies%20and%20educational%20materials%20visible.%20Bright%20daylight%20illuminates%20the%20childrens%20excited%20expressions.&width=400&height=300&seq=1003&orientation=landscape')"></div>
+<div class="p-4 flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-gray-800 font-semibold">School Education Program</h3>
+<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Pine</span>
+</div>
+<p class="text-gray-600 text-sm mb-3">Helped 30 elementary students plant their first trees as part of our environmental education initiative.</p>
+<div class="flex justify-between items-center mt-auto pt-2 text-xs text-gray-500">
+<span>By Westside Elementary</span>
+<span>June 5, 2025</span>
+</div>
+</div>
+</div>
+<div class="card story-card">
+<div class="story-image" style="background-image: url('https://readdy.ai/api/search-image?query=A%20corporate%20team-building%20event%20in%20a%20forest%20area%2C%20with%20business%20professionals%20in%20casual%20clothes%20planting%20birch%20trees.%20The%20scene%20shows%20collaboration%20and%20environmental%20responsibility%2C%20with%20company%20logos%20visible%20on%20some%20t-shirts.%20People%20are%20working%20in%20teams%20with%20planting%20equipment%2C%20showing%20corporate%20social%20responsibility%20in%20action.&width=400&height=300&seq=1004&orientation=landscape')"></div>
+<div class="p-4 flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-gray-800 font-semibold">Corporate Responsibility Day</h3>
+<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Birch</span>
+</div>
+<p class="text-gray-600 text-sm mb-3">Our company planted 50 birch trees as part of our annual sustainability initiative and team building event.</p>
+<div class="flex justify-between items-center mt-auto pt-2 text-xs text-gray-500">
+<span>By EcoTech Solutions</span>
+<span>June 15, 2025</span>
+</div>
+</div>
+</div>
+<div class="card story-card">
+<div class="story-image" style="background-image: url('https://readdy.ai/api/search-image?query=A%20family%20planting%20a%20cherry%20tree%20in%20their%20backyard%20garden.%20Parents%20and%20two%20children%20working%20together%20to%20plant%20a%20flowering%20cherry%20sapling.%20Garden%20tools%20and%20watering%20can%20nearby.%20The%20scene%20shows%20a%20beautiful%20family%20moment%20connecting%20with%20nature%2C%20with%20a%20suburban%20home%20visible%20in%20the%20background.%20Soft%20spring%20lighting%20enhances%20the%20cherry%20blossoms.&width=400&height=300&seq=1005&orientation=landscape')"></div>
+<div class="p-4 flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-gray-800 font-semibold">Family Heritage Tree</h3>
+<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Cherry</span>
+</div>
+<p class="text-gray-600 text-sm mb-3">Planted a cherry tree in our backyard to celebrate the birth of our daughter. A living legacy for generations.</p>
+<div class="flex justify-between items-center mt-auto pt-2 text-xs text-gray-500">
+<span>By Thompson Family</span>
+<span>April 22, 2025</span>
+</div>
+</div>
+</div>
+<div class="card story-card">
+<div class="story-image" style="background-image: url('https://readdy.ai/api/search-image?query=A%20reforestation%20project%20in%20a%20previously%20deforested%20area%2C%20with%20volunteers%20planting%20rows%20of%20diverse%20tree%20species.%20The%20scene%20shows%20a%20mix%20of%20oak%2C%20pine%20and%20other%20native%20trees%20being%20planted%20in%20a%20systematic%20way.%20Environmental%20conservation%20equipment%20visible%2C%20with%20mountains%20in%20the%20background.%20The%20image%20represents%20ecological%20restoration%20and%20biodiversity%20protection.&width=400&height=300&seq=1006&orientation=landscape')"></div>
+<div class="p-4 flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-gray-800 font-semibold">Reforestation Project</h3>
+<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Mixed</span>
+</div>
+<p class="text-gray-600 text-sm mb-3">Participated in restoring 2 acres of forest with 200 native trees after a devastating wildfire last year.</p>
+<div class="flex justify-between items-center mt-auto pt-2 text-xs text-gray-500">
+<span>By Forest Restoration Team</span>
+<span>June 20, 2025</span>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center mt-8">
+<button class="bg-white text-primary py-3 px-8 font-semibold !rounded-button whitespace-nowrap hover:bg-opacity-90 transition">View All Stories</button>
+</div>
+</section>
+<!-- Newsletter Section -->
+<section class="mb-16">
+<div class="card p-8 text-center">
+<h2 class="text-gray-800 text-2xl font-bold mb-4">Stay Connected</h2>
+<p class="text-gray-600 mb-6 max-w-2xl mx-auto">Join our newsletter to receive updates on our progress, upcoming planting events, and tips for tree care.</p>
+<div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+<input type="email" placeholder="Your email address" class="flex-1 px-4 py-3 border border-gray-300 !rounded-button">
+<button class="bg-primary text-white py-3 px-6 font-semibold !rounded-button whitespace-nowrap hover:bg-opacity-90 transition">Subscribe</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-gray-900 py-12 relative z-10">
+<div class="container mx-auto px-4">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+<div>
+<h3 class="text-white text-lg font-bold mb-4">About Us</h3>
+<p class="text-gray-400 text-sm">We're on a mission to plant 1,000 trees by 2026, combating climate change and creating a greener future for all.</p>
+</div>
+<div>
+<h3 class="text-white text-lg font-bold mb-4">Quick Links</h3>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-primary transition">Home</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition">About</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition">Donate</a></li>
+<li><a href="#" class="text-gray-400 hover:text-primary transition">Get Involved</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-white text-lg font-bold mb-4">Contact</h3>
+<ul class="space-y-2 text-gray-400">
+<li class="flex items-center gap-2">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-mail-line"></i>
+</div>
+<span>info@greenearth.org</span>
+</li>
+<li class="flex items-center gap-2">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-phone-line"></i>
+</div>
+<span>(555) 123-4567</span>
+</li>
+<li class="flex items-center gap-2">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-map-pin-line"></i>
+</div>
+<span>123 Forest Way, Green City</span>
+</li>
+</ul>
+</div>
+<div>
+<h3 class="text-white text-lg font-bold mb-4">Follow Us</h3>
+<div class="flex gap-4">
+<a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition">
+<i class="ri-facebook-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition">
+<i class="ri-twitter-x-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition">
+<i class="ri-instagram-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition">
+<i class="ri-linkedin-fill"></i>
+</a>
+</div>
+<div class="mt-6">
+<h4 class="text-white text-sm font-bold mb-2">Our Partners</h4>
+<div class="flex gap-4">
+<div class="w-8 h-8 flex items-center justify-center text-gray-400">
+<i class="ri-earth-fill ri-lg"></i>
+</div>
+<div class="w-8 h-8 flex items-center justify-center text-gray-400">
+<i class="ri-plant-fill ri-lg"></i>
+</div>
+<div class="w-8 h-8 flex items-center justify-center text-gray-400">
+<i class="ri-seedling-fill ri-lg"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+<p>© 2025 GreenEarth Tree Planting Initiative. All rights reserved.</p>
+<p class="mt-2">Last updated: June 28, 2025</p>
+</div>
+</div>
+</footer>
+</div>
+<script id="snow-animation">
+document.addEventListener('DOMContentLoaded', function() {
+const snowContainer = document.getElementById('snow-container');
+const snowflakeCount = 50;
+for (let i = 0; i < snowflakeCount; i++) {
+const snowflake = document.createElement('div');
+snowflake.classList.add('snow');
+// Randomize snowflake properties
+const size = Math.random() * 5 + 2;
+const posX = Math.random() * 100;
+const delay = Math.random() * 10;
+const duration = Math.random() * 10 + 10;
+snowflake.style.width = `${size}px`;
+snowflake.style.height = `${size}px`;
+snowflake.style.left = `${posX}%`;
+snowflake.style.opacity = Math.random() * 0.6 + 0.2;
+snowflake.style.animationDuration = `${duration}s`;
+snowflake.style.animationDelay = `${delay}s`;
+snowContainer.appendChild(snowflake);
+}
+});
+</script>
+<script id="donation-buttons">
+document.addEventListener('DOMContentLoaded', function() {
+const donationCards = document.querySelectorAll('.donation-card');
+const customAmountInput = document.querySelector('input[placeholder="Or enter custom amount"]');
+donationCards.forEach(card => {
+card.addEventListener('click', function() {
+donationCards.forEach(c => c.classList.remove('selected', 'border-primary', 'bg-primary/5'));
+this.classList.add('selected', 'border-primary', 'bg-primary/5');
+customAmountInput.value = '';
+});
+});
+customAmountInput.addEventListener('focus', function() {
+donationCards.forEach(card => card.classList.remove('selected', 'border-primary', 'bg-primary/5'));
+});
+customAmountInput.addEventListener('input', function() {
+if (this.value && !this.value.startsWith('$')) {
+this.value = this.value.replace(/[^\d.]/g, '');
+}
+});
+});
+</script>
+<script id="payment-method-buttons">
+document.addEventListener('DOMContentLoaded', function() {
+const paymentButtons = document.querySelectorAll('.mb-4 .flex-1');
+paymentButtons.forEach(button => {
+button.addEventListener('click', function() {
+// Remove active class from all buttons
+paymentButtons.forEach(btn => {
+btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+btn.classList.add('border-gray-300', 'hover:bg-gray-50');
+});
+// Add active class to clicked button
+this.classList.remove('border-gray-300', 'hover:bg-gray-50');
+this.classList.add('bg-primary', 'text-white', 'border-primary');
+});
+});
+});
+</script>
+</body>
+</html>
